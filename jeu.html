@@ -10,7 +10,7 @@
             width: 100%;
             height: auto;
             filter: blur(10px); /* Commence très flou */
-            transition: filter 15s ease-out; /* Transitions sur 15 secondes */
+            transition: filter 15s ease-out; /* Transition sur 15 secondes */
         }
     </style>
 </head>
@@ -87,10 +87,9 @@
 
                 if (imageUrl) {
                     wordImage.src = imageUrl;  // Change the image source
-                    wordImage.style.filter = 'blur(10px)'; // Start with a blur
-                    setTimeout(() => {
-                        wordImage.style.filter = 'blur(0px)'; // Remove blur over 15 seconds
-                    }, 100); // Start the "de-blurring" immediately
+                    wordImage.onload = () => {
+                        resetImageEffect();  // Ensure effect resets when the new image is loaded
+                    };
                 } else {
                     imageContainer.innerHTML = 'Aucune image trouvée pour ce mot.';
                 }
@@ -104,11 +103,9 @@
         // Reset the image effect (start fresh with blur)
         function resetImageEffect() {
             wordImage.style.filter = 'blur(10px)'; // Apply blur effect
-            wordImage.onload = () => {
-                setTimeout(() => {
-                    wordImage.style.filter = 'blur(0px)'; // Remove the blur effect over time
-                }, 100); // Delay it slightly so the blur effect is visible
-            };
+            setTimeout(() => {
+                wordImage.style.filter = 'blur(0px)'; // Remove the blur effect over time
+            }, 100); // Delay it slightly so the blur effect is visible
         }
 
         // Start the guessing process when buzzer is pressed

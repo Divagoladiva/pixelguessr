@@ -1,37 +1,32 @@
+/* Style global */
 body {
-     text-align: center;
-     font-family: Arial, sans-serif;
-     background-color: #f4f4f4;
-     padding-top: 50px;
- }
- 
- h1 {
-     font-size: 2em;
- }
- 
- button {
-     font-size: 1.5em;
-     padding: 10px 20px;
-     background-color: green;
-     color: white;
-     border: none;
-     cursor: pointer;
-     margin: 20px;
- }
- 
- button:hover {
-     background-color: darkgreen;
- }
- .zone-text {
-     display: inline-block;
-     width: 200px;
-     padding: 5px;
-     margin: 10px;
- }
- /* Style pour le conteneur du bouton buzzer */
- .buzzer-container {
-     text-align: center; /* Centrer le bouton */
- }/* Masquer les éléments par défaut */
+    text-align: center;
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    padding-top: 50px;
+}
+
+/* Style pour le titre */
+h1 {
+    font-size: 2em;
+}
+
+/* Style des boutons */
+button {
+    font-size: 1.5em;
+    padding: 10px 20px;
+    background-color: green;
+    color: white;
+    border: none;
+    cursor: pointer;
+    margin: 20px;
+}
+
+button:hover {
+    background-color: darkgreen;
+}
+
+/* Masquer les éléments par défaut */
 .hidden {
     display: none;
 }
@@ -50,20 +45,19 @@ body {
 /* Apparence du guess-container */
 #guess-container {
     margin-top: 20px;
-    position: absolute; /* Pour pouvoir le déplacer sans qu'il chevauche le buzzer */
-    top: 50%; /* Centré verticalement */
-    right: 10%; /* Un peu à droite pour ne pas chevaucher */
-    transform: translateY(-50%); /* Ajuste la position pour qu'il soit bien centré verticalement */
+    position: absolute;
+    top: 50%;
+    left: 65%;
+    transform: translate(-50%, -50%);
+    display: none; /* Cache par défaut */
 }
 
-/* Style de l'input du guess */
 #guess-input {
     padding: 10px;
     margin-right: 10px;
     width: 200px;
 }
 
-/* Positionnement du bouton "Valider" */
 #submit-guess {
     padding: 10px 20px;
     cursor: pointer;
@@ -82,31 +76,34 @@ body {
     height: auto;
 }
 
-/* Positionnement du bouton buzzer */
+/* Style du bouton buzzer */
 #buzzerButton {
-    position: fixed;
-    bottom: 20px; /* Placé en bas de la page */
+    position: absolute;
+    bottom: 10px;
     left: 50%;
-    transform: translateX(-50%); /* Centré horizontalement */
-    background-color: transparent;
+    transform: translateX(-50%);
+    background: transparent;
     border: none;
     cursor: pointer;
-    z-index: 10; /* S'assure que le bouton buzzer est au-dessus des autres éléments */
 }
 
 #buzzerButton img {
-    width: 150px; /* Taille du buzzer */
+    width: 150px; /* Ajuste la taille */
     height: auto;
 }
 
-/* Positionnement du result-container */
+/* Style du result-container */
 #result-container {
-    text-align: center;
-    margin-top: 10px;
     position: absolute;
-    top: 60%; /* Un peu plus bas que le guess-container */
-    right: 10%; /* Même position à droite */
-    transform: translateY(-50%);
-    display: block; /* S'assure qu'il soit visible */
-    font-size: 18px;
+    top: 50%;
+    left: 65%;
+    transform: translate(-50%, -50%);
+    display: none; /* Cache par défaut */
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+/* Animation de visibilité du guess-container et result-container */
+#result-container, #guess-container {
+    transition: all 0.3s ease-in-out;
 }

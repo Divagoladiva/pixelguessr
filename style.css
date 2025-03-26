@@ -17,36 +17,29 @@
 /* Apparence du guess-container */
 #guess-container {
     margin-top: 20px;
-    text-align: center; /* Centrer le contenu */
+    position: absolute; /* Pour pouvoir le déplacer sans qu'il chevauche le buzzer */
+    top: 50%; /* Centré verticalement */
+    right: 10%; /* Un peu à droite pour ne pas chevaucher */
+    transform: translateY(-50%); /* Ajuste la position pour qu'il soit bien centré verticalement */
 }
 
+/* Style de l'input du guess */
 #guess-input {
     padding: 10px;
     margin-right: 10px;
     width: 200px;
-    font-size: 16px; /* Taille de police agréable */
 }
 
+/* Positionnement du bouton "Valider" */
 #submit-guess {
     padding: 10px 20px;
     cursor: pointer;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    font-size: 16px;
-    transition: background-color 0.3s ease;
-}
-
-#submit-guess:hover {
-    background-color: #45a049; /* Couleur au survol */
 }
 
 /* Positionnement du randomWord et image */
 #randomWord {
     text-align: center;
     margin-top: 20px;
-    font-size: 24px;
-    font-weight: bold;
 }
 
 #randomImage {
@@ -56,36 +49,31 @@
     height: auto;
 }
 
-/* Style du bouton buzzer */
-#buzzerButton img {
-    display: block;
-    margin: 0 auto;
-    width: 300px;
-    height: 300px;
-    cursor: pointer;
-}
-
-/* Style du bouton Nouveau (newWordButton) */
-#newWordButton {
-    display: block;
-    margin: 30px auto;
-    padding: 15px 30px;
-    font-size: 18px;
-    background-color: #4CAF50;
-    color: white;
+/* Positionnement du bouton buzzer */
+#buzzerButton {
+    position: fixed;
+    bottom: 20px; /* Placé en bas de la page */
+    left: 50%;
+    transform: translateX(-50%); /* Centré horizontalement */
+    background-color: transparent;
     border: none;
-    border-radius: 5px;
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    z-index: 10; /* S'assure que le bouton buzzer est au-dessus des autres éléments */
 }
 
-#newWordButton:hover {
-    background-color: #45a049; /* Couleur au survol */
+#buzzerButton img {
+    width: 150px; /* Taille du buzzer */
+    height: auto;
 }
 
-/* Conteneur pour le résultat */
+/* Positionnement du result-container */
 #result-container {
     text-align: center;
+    margin-top: 10px;
+    position: absolute;
+    top: 60%; /* Un peu plus bas que le guess-container */
+    right: 10%; /* Même position à droite */
+    transform: translateY(-50%);
+    display: block; /* S'assure qu'il soit visible */
     font-size: 18px;
-    margin-top: 20px;
 }

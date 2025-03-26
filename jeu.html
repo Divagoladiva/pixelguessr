@@ -10,6 +10,7 @@
         .image {
             width: 100%;
             transition: all 15s ease-out; /* Transition de 15 secondes pour la dépixélisation */
+            transform: scale(0.01); /* Initialement, l'image est réduite à 1% de sa taille */
         }
 
         .pixelated {
@@ -92,9 +93,10 @@
 
                     // Applique un effet de pixelisation en agrandissant l'image
                     wordImage.classList.add('pixelated');
+                    wordImage.style.transform = 'scale(0.01)'; // Commence avec une taille de 1% (1x1 pixel)
                     setTimeout(() => {
                         // Dépixélisation : réduction progressive de l'échelle
-                        wordImage.style.transform = 'scale(1)';  // Normalise l'échelle de l'image
+                        wordImage.style.transform = 'scale(1)';  // L'image reprend sa taille normale
                     }, 100);  // Applique après un délai pour s'assurer que l'image est chargée
                 } else {
                     imageContainer.innerHTML = 'Aucune image trouvée pour ce mot.';

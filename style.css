@@ -1,35 +1,47 @@
-    body {
-        text-align: center;
-        font-family: Arial, sans-serif;
-        background-color: #f4f4f4;
-        padding-top: 50px;
-    }
-    
-    h1 {
-        font-size: 2em;
-    }
-    
-    button {
-        font-size: 1.5em;
-        padding: 10px 20px;
-        background-color: green;
-        color: white;
-        border: none;
-        cursor: pointer;
-        margin: 20px;
-    }
-    
-    button:hover {
-        background-color: darkgreen;
-    }
-    
-    h2 {
-        font-size: 2em;
-        margin-top: 20px;
-    }
-    
-    img {
-        margin-top: 20px;
-        max-width: 100%;
-        height: auto;
-    }
+body {
+    text-align: center;
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    padding-top: 50px;
+}
+
+h1 {
+    font-size: 2em;
+}
+
+button {
+    font-size: 1.5em;
+    padding: 10px 20px;
+    background-color: green;
+    color: white;
+    border: none;
+    cursor: pointer;
+    margin: 20px;
+}
+
+button:hover {
+    background-color: darkgreen;
+}
+
+#guess-container {
+    margin-top: 20px;
+}
+
+.hidden {
+    display: none;
+}
+
+.correct {
+    color: green;
+}
+
+.incorrect {
+    color: red;
+}
+
+.zone-text {
+    display: inline-block;
+    width: 200px;
+    padding: 5px;
+    margin: 10px;
+}

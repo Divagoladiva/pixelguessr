@@ -1,5 +1,4 @@
-<!-- Fichier: aleatoire.html -->
-    <!DOCTYPE html>
+<!DOCTYPE html>
     <html lang="fr">
     <head>
         <meta charset="UTF-8">
@@ -19,10 +18,18 @@
                 let randomWord = words[Math.floor(Math.random() * words.length)];
                 document.getElementById("randomWord").textContent = randomWord;
     
-                fetch(`https://source.unsplash.com/400x300/?${randomWord}`)
-                    .then(response => {
-                        document.getElementById("randomImage").src = response.url;
-                    });
+                fetch(`https://en.wikipedia.org/w/api.php?action=query&format=json&origin=*&prop=pageimages&titles=${randomWord}&pithumbsize=400`)
+                    .then(response => response.json())
+                    .then(data => {
+                        const pages = data.query.pages;
+                        const page = Object.values(pages)[0];
+                        if (page.thumbnail) {
+                            document.getElementById("randomImage").src = page.thumbnail.source;
+                        } else {
+                            document.getElementById("randomImage").src = "https://via.placeholder.com/400x300?text=Aucune+image";
+                        }
+                    })
+                    .catch(error => console.error("Erreur lors de la récupération de l'image:", error));
             });
         </script>
     </body>

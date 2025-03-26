@@ -1,0 +1,29 @@
+<!-- Fichier: aleatoire.html -->
+    <!DOCTYPE html>
+    <html lang="fr">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Générateur Aléatoire</title>
+        <link rel="stylesheet" href="style.css">
+    </head>
+    <body>
+        <button id="newWordButton">Nouveau</button>
+        <h2 id="randomWord"></h2>
+        <img id="randomImage" src="" alt="Image aléatoire">
+    
+        <script>
+            const words = ["chien", "chat", "pomme", "soleil", "voiture", "montagne", "ocean", "ordinateur", "livre", "musique"];
+    
+            document.getElementById("newWordButton").addEventListener("click", function() {
+                let randomWord = words[Math.floor(Math.random() * words.length)];
+                document.getElementById("randomWord").textContent = randomWord;
+    
+                fetch(`https://source.unsplash.com/400x300/?${randomWord}`)
+                    .then(response => {
+                        document.getElementById("randomImage").src = response.url;
+                    });
+            });
+        </script>
+    </body>
+    </html>

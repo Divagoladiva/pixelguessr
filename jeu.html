@@ -8,7 +8,6 @@
 </head>
 <body>
     <div class="container">
-        <h1>Pixel Guessr</h1>
         <button id="new-word-btn">Nouveau</button>
         <div id="word-display"></div>
         <div id="image-container"></div>
@@ -39,9 +38,9 @@
             })
             .then(response => response.json())
             .then(data => {
-                const imageUrl = data.photos[0]?.src?.large;
+                const imageUrl = data.photos[0]?.src?.medium; // Utilisation d'une taille d'image plus petite
                 if (imageUrl) {
-                    imageContainer.innerHTML = `<img src="${imageUrl}" alt="${word}" style="max-width: 100%; height: auto;">`;
+                    imageContainer.innerHTML = `<img src="${imageUrl}" alt="${word}" class="image">`;
                 } else {
                     imageContainer.innerHTML = 'Aucune image trouvée pour ce mot.';
                 }

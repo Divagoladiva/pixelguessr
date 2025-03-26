@@ -1,4 +1,5 @@
-<!DOCTYPE html>
+    <!-- Fichier: aleatoire.html -->
+    <!DOCTYPE html>
     <html lang="fr">
     <head>
         <meta charset="UTF-8">
@@ -18,13 +19,11 @@
                 let randomWord = words[Math.floor(Math.random() * words.length)];
                 document.getElementById("randomWord").textContent = randomWord;
     
-                fetch(`https://en.wikipedia.org/w/api.php?action=query&format=json&origin=*&prop=pageimages&titles=${randomWord}&pithumbsize=400`)
+                fetch(`https://api.qwant.com/v3/search/images?count=1&q=${randomWord}`)
                     .then(response => response.json())
                     .then(data => {
-                        const pages = data.query.pages;
-                        const page = Object.values(pages)[0];
-                        if (page.thumbnail) {
-                            document.getElementById("randomImage").src = page.thumbnail.source;
+                        if (data.data.result.items.length > 0) {
+                            document.getElementById("randomImage").src = data.data.result.items[0].media;
                         } else {
                             document.getElementById("randomImage").src = "https://via.placeholder.com/400x300?text=Aucune+image";
                         }

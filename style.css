@@ -23,10 +23,6 @@ button:hover {
     background-color: darkgreen;
 }
 
-#guess-container {
-    margin-top: 20px;
-}
-
 .hidden {
     display: none;
 }
@@ -65,4 +61,46 @@ button:hover {
     width: 300px; /* Taille 3x plus grande */
     height: 300px; /* Taille 3x plus grande */
 }
+/* Centrage du conteneur des résultats et de la zone de deviner */
+#guess-container, #result-container {
+    position: absolute; /* Positionnement absolu pour les placer où on veut */
+    right: 0; /* Placer à droite */
+    top: 50%; /* Positionner à 50% du haut de la fenêtre (c'est-à-dire centré verticalement) */
+    transform: translateY(-50%); /* Ajuster la position pour qu'il soit parfaitement centré verticalement */
+    width: 33%; /* 1/3 de la largeur pour laisser de la place à l'image à gauche */
+    padding: 20px; /* Pour ajouter un peu de marge autour du contenu */
+    background-color: rgba(255, 255, 255, 0.8); /* Fond légèrement transparent pour la lisibilité */
+    border-radius: 8px; /* Arrondir les coins */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Ajouter un ombrage pour un effet de profondeur */
+}
 
+#result-container {
+    padding-top: 10px;
+    font-size: 18px;
+    text-align: center;
+    font-weight: bold;
+}
+
+/* Optionnel: style pour le bouton dans le container de deviner */
+#guess-container input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+#submit-guess {
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    background-color: #4CAF50;
+    color: white;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+#submit-guess:hover {
+    background-color: #45a049;
+}

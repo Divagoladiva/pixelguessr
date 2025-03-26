@@ -12,12 +12,20 @@
         <h2 id="word-display">Cliquez sur "Nouveau" pour commencer</h2>
     </div>
 
+    <!-- Inclusion du fichier liste.js ici -->
     <script src="liste.js"></script>
+    
+    <!-- Script pour récupérer un mot aléatoire -->
     <script>
         function getNewWord() {
-            const randomIndex = Math.floor(Math.random() * words.length);
-            const word = words[randomIndex];
-            document.getElementById('word-display').innerText = word;
+            // Vérifie si 'words' est défini avant de l'utiliser
+            if (typeof words !== 'undefined' && words.length > 0) {
+                const randomIndex = Math.floor(Math.random() * words.length);
+                const word = words[randomIndex];
+                document.getElementById('word-display').innerText = word;
+            } else {
+                console.error("La variable 'words' n'est pas définie ou vide.");
+            }
         }
     </script>
 </body>

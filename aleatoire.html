@@ -1,35 +1,29 @@
-    <!-- Fichier: aleatoire.html -->
-    <!DOCTYPE html>
-    <html lang="fr">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Générateur Aléatoire</title>
-        <link rel="stylesheet" href="style.css">
-    </head>
-    <body>
-        <button id="newWordButton">Nouveau</button>
-        <h2 id="randomWord"></h2>
-        <img id="randomImage" src="" alt="Image aléatoire">
-    
-        <script>
-            const words = ["chien", "chat", "pomme", "soleil", "voiture", "montagne", "ocean", "ordinateur", "livre", "musique"];
-    
-            document.getElementById("newWordButton").addEventListener("click", function() {
-                let randomWord = words[Math.floor(Math.random() * words.length)];
-                document.getElementById("randomWord").textContent = randomWord;
-    
-                fetch(`https://api.qwant.com/v3/search/images?count=1&q=${randomWord}`)
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.data.result.items.length > 0) {
-                            document.getElementById("randomImage").src = data.data.result.items[0].media;
-                        } else {
-                            document.getElementById("randomImage").src = "https://via.placeholder.com/400x300?text=Aucune+image";
-                        }
-                    })
-                    .catch(error => console.error("Erreur lors de la récupération de l'image:", error));
-            });
-        </script>
-    </body>
-    </html>
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Générateur Aléatoire</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <button id="newWordButton">Nouveau</button>
+    <h2 id="randomWord"></h2>
+    <img id="randomImage" src="" alt="Image aléatoire">
+
+    <script>
+        const words = ["chien", "chat", "pomme", "soleil", "voiture", "montagne", "océan", "ordinateur", "livre", "musique"];
+
+        document.getElementById("newWordButton").addEventListener("click", function() {
+            let randomWord = words[Math.floor(Math.random() * words.length)];
+            document.getElementById("randomWord").textContent = randomWord;
+
+            // Utilisation d'Unsplash Source pour récupérer une image liée au mot
+            const imageUrl = `https://source.unsplash.com/400x300/?${randomWord}`;
+
+            // Affichage de l'image
+            document.getElementById("randomImage").src = imageUrl;
+        });
+    </script>
+</body>
+</html>

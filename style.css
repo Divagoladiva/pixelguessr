@@ -8,6 +8,7 @@ body {
     height: 100vh;
     margin: 0;
     text-align: center;
+    padding: 0 10px; /* Ajouter un peu de marge sur les côtés de la page */
 }
 
 .container {
@@ -18,14 +19,17 @@ body {
     border-radius: 10px;
     box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
     padding: 20px;
-    width: 80%;
-    max-width: 900px;
+    width: 100%;
+    max-width: 1200px; /* Augmenter la largeur maximale du container */
+    margin: 0 10px; /* Marges pour laisser de l'espace de chaque côté */
+    box-sizing: border-box; /* Assure que les paddings et marges sont inclus dans la largeur totale */
 }
 
 /* Container pour le bouton "Buzzer" */
 .left-container {
     flex: 1;
     text-align: center;
+    padding-right: 20px; /* Ajout d'un peu de padding à droite pour espacer le contenu */
 }
 
 .buzzer-btn {
@@ -45,6 +49,7 @@ body {
 .main-content {
     flex: 2;
     text-align: center;
+    padding-left: 20px; /* Ajout d'un peu de padding à gauche pour espacer le contenu */
 }
 
 button {

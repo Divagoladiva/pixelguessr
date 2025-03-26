@@ -7,27 +7,28 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <button id="newWordButton">Nouveau</button>
-    <h2 id="randomWord"></h2>
-    <img id="randomImage" src="" alt="Image aléatoire">
-    
-    <!-- Container pour le bouton "Buzzer" pour qu'il soit en dessous de l'image -->
-    <div class="buzzer-container">
-        <button id="buzzerButton">
-            <img src="buzzer.png" alt="Buzzer" width="150" height="150"> <!-- L'icône est 3x plus grande -->
-        </button>
-    </div>
-    
-    <!-- Zone pour deviner l'objet -->
-    <div id="guess-container" class="hidden">
-        <input type="text" id="guess-input" class="zone-text" placeholder="Entrez votre réponse">
-        <button id="submit-guess">Valider</button>
-    </div>
+    <div id="main-container">
+        <!-- Zone de l'image et du bouton -->
+        <div id="image-container">
+            <img id="randomImage" src="" alt="Image aléatoire">
+            <button id="newWordButton">Nouveau</button>
+            <button id="buzzerButton">
+                <img src="buzzer.png" alt="Buzzer" />
+            </button>
+        </div>
+        
+        <!-- Zone de deviner et résultats -->
+        <div id="guess-container" style="display:none;">
+            <input type="text" id="userGuess" placeholder="Devinez l'objet">
+            <button id="submit-guess">Valider</button>
+        </div>
 
-    <div id="result-container"></div>
+        <div id="result-container" style="display:none;">
+            <p id="resultText"></p>
+        </div>
+    </div>
 
     <script>
-        // Complètement de la liste des mots (ajoute tous les mots de ta liste)
         const words = [
             "chair", "table", "sofa", "bed", "desk", "lamp", "television", "refrigerator", "microwave", "toaster",
             "clock", "rug", "curtain", "window", "door", "knife", "fork", "spoon", "plate", "glass",
@@ -78,67 +79,51 @@
             "pool", "trailer", "calendar", "cutting board", "glass", "cookie jar", "cloth", "aluminum foil",
             "cat basket", "bread basket", "crate", "fruit basket", "grocery basket", "animal basket", "dirty laundry basket"
         ];
-        
+
         const apiKey = 'hqpPkwEsVPGOmZt7TFlJMSRBv0PtDdjZtDwN2OMgxem3mPQ3ZkJgo4oN';
 
-        let currentWord = '';
-        let currentImageUrl = '';
-
         document.getElementById("newWordButton").addEventListener("click", function() {
-            generateNewWord();
-        });
+            let randomWord = words[Math.floor(Math.random() * words.length)];
+            document.getElementById("randomWord").textContent = randomWord;
 
-        document.getElementById("buzzerButton").addEventListener("click", function() {
-            document.getElementById("guess-container").classList.remove('hidden');
-            document.getElementById("result-container").textContent = ''; // Clear previous result
-            document.getElementById("guess-input").value = ''; // Clear previous input
-        });
-
-        document.getElementById("submit-guess").addEventListener("click", function() {
-            const userGuess = document.getElementById("guess-input").value.trim().toLowerCase();
-            
-            if (userGuess === currentWord) {
-                document.getElementById("result-container").textContent = "Bravo, c'est correct!";
-                document.getElementById("result-container").classList.add('correct');
-                document.getElementById("result-container").classList.remove('incorrect');
-            } else {
-                document.getElementById("result-container").textContent = "Désolé, ce n'est pas correct.";
-                document.getElementById("result-container").classList.add('incorrect');
-                document.getElementById("result-container").classList.remove('correct');
-            }
-            
-            // Reset and load new word and image after 2 seconds
-            setTimeout(function() {
-                generateNewWord();
-                document.getElementById("guess-container").classList.add('hidden');
-            }, 2000);
-        });
-
-        function generateNewWord() {
-            // Choisir un mot aléatoire
-            currentWord = words[Math.floor(Math.random() * words.length)];
-            document.getElementById("randomWord").textContent = currentWord;
-
-            // Requête vers l'API Pexels pour obtenir une image aléatoire
-            fetch(`https://api.pexels.com/v1/search?query=${currentWord}&per_page=1`, {
+            // Requête vers l'API Pexels pour rechercher une image
+            fetch(`https://api.pexels.com/v1/search?query=${randomWord}&per_page=1`, {
                 headers: {
-                    Authorization: apiKey // Clé API pour authentification
+                    Authorization: apiKey // Envoie la clé API pour authentification
                 }
             })
             .then(response => response.json())
             .then(data => {
                 if (data.photos && data.photos.length > 0) {
-                    currentImageUrl = data.photos[0].src.medium;
-                    document.getElementById("randomImage").src = currentImageUrl;
+                    document.getElementById("randomImage").src = data.photos[0].src.medium;
                 } else {
                     document.getElementById("randomImage").src = "https://via.placeholder.com/400x300?text=Aucune+image";
                 }
             })
             .catch(error => console.error("Erreur lors de la récupération de l'image:", error));
-        }
+        });
 
-        // Initial call to display a word and image when the page loads
-        generateNewWord();
+        document.getElementById("buzzerButton").addEventListener("click", function() {
+            // Afficher la zone de deviner
+            document.getElementById("guess-container").style.display = 'block';
+            document.getElementById("result-container").style.display = 'none'; // Cacher la zone de résultat avant de deviner
+        });
+
+        document.getElementById("submit-guess").addEventListener("click", function() {
+            const userGuess = document.getElementById("userGuess").value.toLowerCase();
+            const randomWord = document.getElementById("randomWord").textContent.toLowerCase();
+            const resultText = document.getElementById("resultText");
+
+            if (userGuess === randomWord) {
+                resultText.textContent = "Bravo ! Vous avez deviné l'objet !";
+                resultText.style.color = "green";
+            } else {
+                resultText.textContent = "Désolé, ce n'est pas correct. Essayez encore.";
+                resultText.style.color = "red";
+            }
+
+            document.getElementById("result-container").style.display = 'block'; // Afficher la zone de résultat
+        });
     </script>
 </body>
 </html>

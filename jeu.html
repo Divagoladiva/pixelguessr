@@ -1,72 +1,130 @@
-
 <!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pixel Guessr</title>
+    <title>Jeu</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container">
+        <!-- Partie gauche (buzzer) -->
         <div class="left-container">
-            <button id="buzzer-btn" class="buzzer-btn">
+            <button class="buzzer-btn" id="buzzer-btn">
                 <img src="buzzer.png" alt="Buzzer" class="buzzer-icon">
             </button>
         </div>
+
+        <!-- Partie droite (mot et image) -->
         <div class="main-content">
             <button id="new-word-btn">Nouveau</button>
-            <div id="word-display"></div>
-            <div id="image-container"></div>
+
+            <div id="word-display">
+                <span id="current-word">_ _ _ _ _</span>
+            </div>
+
+            <div id="image-container">
+                <img id="word-image" src="" alt="Mot image">
+            </div>
+
+            <!-- Zone de saisie pour deviner le mot -->
+            <div id="guess-container" style="display: none;">
+                <input type="text" id="guess-input" placeholder="Entrez votre réponse">
+                <button id="check-btn">✅</button>
+            </div>
+
+            <div id="response-message" style="display: none;">
+                <p id="response-text"></p>
+            </div>
         </div>
     </div>
 
-    <audio id="buzzer-sound" src="buzzerson.mp3"></audio> <!-- L'élément audio pour jouer le son -->
-
-    <script src="liste.js"></script>
     <script>
-        const newWordBtn = document.getElementById('new-word-btn');
-        const wordDisplay = document.getElementById('word-display');
-        const imageContainer = document.getElementById('image-container');
-        const buzzerBtn = document.getElementById('buzzer-btn');
-        const buzzerSound = document.getElementById('buzzer-sound');
+        // Liste de mots
+        const words = ["pan", "sofa", "lamp", "table", "desk"];  // Liste réduite pour l'exemple
 
-        newWordBtn.addEventListener('click', getNewWord);
-        buzzerBtn.addEventListener('click', playBuzzerSound);
+        let currentWord = "";
+        let displayedWord = "";
+        let wordImageUrl = "";
+        let wordLetters = [];
 
-        function getNewWord() {
-            const randomWord = words[Math.floor(Math.random() * words.length)];
-            wordDisplay.innerHTML = `Mot: ${randomWord}`;
-            fetchImage(randomWord);
+        // Référence aux éléments DOM
+        const buzzerButton = document.getElementById("buzzer-btn");
+        const newWordButton = document.getElementById("new-word-btn");
+        const wordDisplay = document.getElementById("current-word");
+        const wordImage = document.getElementById("word-image");
+        const guessContainer = document.getElementById("guess-container");
+        const guessInput = document.getElementById("guess-input");
+        const checkBtn = document.getElementById("check-btn");
+        const responseMessage = document.getElementById("response-message");
+        const responseText = document.getElementById("response-text");
+
+        // Fonction pour choisir un mot aléatoire
+        function getRandomWord() {
+            const randomIndex = Math.floor(Math.random() * words.length);
+            return words[randomIndex];
         }
 
-        function fetchImage(word) {
-            const apiKey = 'hqpPkwEsVPGOmZt7TFlJMSRBv0PtDdjZtDwN2OMgxem3mPQ3ZkJgo4oN';
-            const apiUrl = `https://api.pexels.com/v1/search?query=${word}&per_page=1`;
+        // Fonction pour afficher le mot sous forme de underscores (_)
+        function displayWord(word) {
+            displayedWord = word.split("").map(() => "_").join(" ");
+            wordDisplay.textContent = displayedWord;
+            wordLetters = word.split("");
+        }
 
-            fetch(apiUrl, {
+        // Fonction pour afficher une nouvelle image basée sur le mot
+        function displayImage(word) {
+            const imageUrl = `https://api.pexels.com/v1/search?query=${word}&per_page=1`;
+            fetch(imageUrl, {
                 headers: {
-                    'Authorization': apiKey
+                    Authorization: "hqpPkwEsVPGOmZt7TFlJMSRBv0PtDdjZtDwN2OMgxem3mPQ3ZkJgo4oN"
                 }
             })
             .then(response => response.json())
             .then(data => {
-                const imageUrl = data.photos[0]?.src?.large; // Taille de l'image augmentée
-                if (imageUrl) {
-                    imageContainer.innerHTML = `<img src="${imageUrl}" alt="${word}" class="image">`;
-                } else {
-                    imageContainer.innerHTML = 'Aucune image trouvée pour ce mot.';
+                if (data.photos && data.photos.length > 0) {
+                    wordImageUrl = data.photos[0].src.medium;
+                    wordImage.src = wordImageUrl;
                 }
-            })
-            .catch(error => {
-                console.error('Erreur lors de la récupération de l\'image:', error);
-                imageContainer.innerHTML = 'Erreur lors de la récupération de l\'image.';
             });
         }
 
-        function playBuzzerSound() {
-            buzzerSound.play();
+        // Fonction pour afficher une lettre du mot
+        function revealLetter() {
+            const randomIndex = Math.floor(Math.random() * wordLetters.length);
+            displayedWord = displayedWord.split(" ");
+            displayedWord[randomIndex] = wordLetters[randomIndex];
+            wordDisplay.textContent = displayedWord.join(" ");
         }
+
+        // Quand on appuie sur le buzzer, on affiche la zone de texte
+        buzzerButton.addEventListener("click", () => {
+            guessContainer.style.display = "block";
+            responseMessage.style.display = "none";  // Cacher les messages précédents
+        });
+
+        // Quand on clique sur "Nouveau", on récupère un mot et une image aléatoires
+        newWordButton.addEventListener("click", () => {
+            currentWord = getRandomWord();
+            displayWord(currentWord);
+            displayImage(currentWord);
+            guessContainer.style.display = "none";  // Cacher la zone de texte au début
+            responseMessage.style.display = "none";  // Cacher les messages précédents
+        });
+
+        // Vérifier la réponse quand on clique sur le bouton ✅
+        checkBtn.addEventListener("click", () => {
+            const userGuess = guessInput.value.trim().toLowerCase();
+            if (userGuess === currentWord) {
+                responseText.textContent = "Bonne réponse!";
+                responseMessage.style.display = "block";
+                guessContainer.style.display = "none";
+            } else {
+                responseText.textContent = "Mauvaise réponse!";
+                responseMessage.style.display = "block";
+                revealLetter();
+            }
+        });
     </script>
 </body>
 </html>

@@ -3,117 +3,152 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jeu</title>
+    <title>Pixel Guessr</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+
     <div class="container">
-        <!-- Partie gauche (buzzer) -->
-        <div class="left-container">
-            <button class="buzzer-btn" id="buzzer-btn">
+        <h1 id="current-word"></h1> <!-- Affichage du mot (avec _ au début) -->
+        <div id="image-container" style="text-align: center;">
+            <img id="image-element" style="max-width: 600px; max-height: 600px; display: none;" alt="Image associée au mot">
+        </div>
+
+        <button id="new-word-btn" class="button">Nouveau</button>
+
+        <div id="guess-container" style="display: none; text-align: center;">
+            <input type="text" id="guess-input" placeholder="Devinez le mot" class="input">
+            <button id="check-btn" class="button">✅</button>
+        </div>
+
+        <div id="response-message" style="display: none; text-align: center;">
+            <p id="response-text"></p>
+        </div>
+
+        <!-- Buzzer -->
+        <div id="buzzer-container" style="text-align: left;">
+            <button id="buzzer-btn" class="buzzer-button">
                 <img src="buzzer.png" alt="Buzzer" class="buzzer-icon">
             </button>
         </div>
-
-        <!-- Partie droite (mot et image) -->
-        <div class="main-content">
-            <button id="new-word-btn">Nouveau</button>
-
-            <div id="word-display">
-                <span id="current-word">_ _ _ _ _</span>
-            </div>
-
-            <div id="image-container">
-                <img id="word-image" src="" alt="Mot image">
-            </div>
-
-            <!-- Zone de saisie pour deviner le mot -->
-            <div id="guess-container" style="display: none;">
-                <input type="text" id="guess-input" placeholder="Entrez votre réponse">
-                <button id="check-btn">✅</button>
-            </div>
-
-            <div id="response-message" style="display: none;">
-                <p id="response-text"></p>
-            </div>
-        </div>
     </div>
 
-    <script src="liste.js"></script> <!-- Importer le fichier liste.js -->
-<script>
-    let currentWord = "";
-    let displayedWord = "";
-    let wordLetters = [];
-    let revealedIndexes = [];
+    <script src="liste.js"></script>
+    <script>
+        let currentWord = "";
+        let displayedWord = "";
+        let wordLetters = [];
+        let revealedIndexes = [];
 
-    // Sélection des éléments HTML
-    const newWordButton = document.getElementById("new-word-btn");
-    const wordDisplay = document.getElementById("current-word");
-    const guessContainer = document.getElementById("guess-container");
-    const guessInput = document.getElementById("guess-input");
-    const checkBtn = document.getElementById("check-btn");
-    const responseMessage = document.getElementById("response-message");
-    const responseText = document.getElementById("response-text");
+        // Sélection des éléments HTML
+        const newWordButton = document.getElementById("new-word-btn");
+        const wordDisplay = document.getElementById("current-word");
+        const guessContainer = document.getElementById("guess-container");
+        const guessInput = document.getElementById("guess-input");
+        const checkBtn = document.getElementById("check-btn");
+        const responseMessage = document.getElementById("response-message");
+        const responseText = document.getElementById("response-text");
+        const imageContainer = document.getElementById("image-container");
+        const imageElement = document.getElementById("image-element");
+        const buzzerButton = document.getElementById("buzzer-btn");
 
-    // Fonction pour obtenir un mot aléatoire
-    function getRandomWord() {
-        return words[Math.floor(Math.random() * words.length)];
-    }
-
-    // Fonction pour masquer le mot sous des "_"
-    function displayWord(word) {
-        currentWord = word;
-        displayedWord = "_".repeat(word.length).split("").join(" ");
-        wordDisplay.textContent = displayedWord;
-        wordLetters = word.split("");
-        revealedIndexes = []; // Réinitialisation des lettres révélées
-    }
-
-    // Fonction pour révéler une lettre aléatoire encore cachée
-    function revealLetter() {
-        let hiddenIndexes = wordLetters.map((letter, index) => index)
-                                       .filter(index => !revealedIndexes.includes(index));
-
-        if (hiddenIndexes.length === 0) return; // Si toutes les lettres sont révélées, on arrête
-
-        let randomIndex = hiddenIndexes[Math.floor(Math.random() * hiddenIndexes.length)];
-        revealedIndexes.push(randomIndex);
-
-        // Mise à jour de l'affichage
-        let newDisplay = wordLetters.map((letter, index) =>
-            revealedIndexes.includes(index) ? letter : "_"
-        ).join(" ");
-
-        wordDisplay.textContent = newDisplay;
-    }
-
-    // Quand on clique sur "Nouveau", on choisit un nouveau mot
-    newWordButton.addEventListener("click", () => {
-        let newWord = getRandomWord();
-        displayWord(newWord);
-        guessContainer.style.display = "none"; // Cacher la zone de texte au début
-        responseMessage.style.display = "none"; // Cacher le message précédent
-    });
-
-    // Vérifier la réponse au clic sur "✅"
-    checkBtn.addEventListener("click", () => {
-        let userGuess = guessInput.value.trim().toLowerCase();
-
-        if (userGuess === currentWord) {
-            responseText.textContent = "Bonne réponse!";
-            responseMessage.style.display = "block";
-            setTimeout(() => newWordButton.click(), 2000); // Afficher un nouveau mot après 2s
-        } else {
-            responseText.textContent = "Mauvaise réponse!";
-            responseMessage.style.display = "block";
-            revealLetter(); // Révéler une lettre en cas de mauvaise réponse
-
-            // Vérifier si toutes les lettres sont révélées
-            if (revealedIndexes.length === wordLetters.length) {
-                setTimeout(() => newWordButton.click(), 2000);
-            }
+        // Fonction pour obtenir un mot aléatoire
+        function getRandomWord() {
+            return words[Math.floor(Math.random() * words.length)];
         }
-    });
-</script>
+
+        // Fonction pour afficher l'image correspondant au mot
+        function displayImage(word) {
+            const imageUrl = `https://api.pexels.com/v1/search?query=${word}&per_page=1`;
+            const apiKey = "hqpPkwEsVPGOmZt7TFlJMSRBv0PtDdjZtDwN2OMgxem3mPQ3ZkJgo4oN"; // Votre clé API
+
+            // Faire une requête API pour obtenir l'image
+            fetch(imageUrl, {
+                headers: {
+                    "Authorization": apiKey
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.photos && data.photos.length > 0) {
+                    imageElement.src = data.photos[0].src.large; // Affiche la première image
+                    imageElement.style.display = "block"; // S'assurer que l'image est visible
+                } else {
+                    imageElement.style.display = "none"; // Si aucune image trouvée, on cache l'élément
+                }
+            })
+            .catch(error => {
+                console.error("Erreur lors de la récupération de l'image:", error);
+                imageElement.style.display = "none"; // En cas d'erreur, cacher l'image
+            });
+        }
+
+        // Fonction pour masquer le mot sous des "_"
+        function displayWord(word) {
+            currentWord = word;
+            displayedWord = "_".repeat(word.length).split("").join(" ");
+            wordDisplay.textContent = displayedWord;
+            wordLetters = word.split("");
+            revealedIndexes = []; // Réinitialisation des lettres révélées
+            displayImage(word); // Affichage de l'image correspondante
+        }
+
+        // Fonction pour révéler une lettre aléatoire encore cachée
+        function revealLetter() {
+            let hiddenIndexes = wordLetters.map((letter, index) => index)
+                                           .filter(index => !revealedIndexes.includes(index));
+
+            if (hiddenIndexes.length === 0) return; // Si toutes les lettres sont révélées, on arrête
+
+            let randomIndex = hiddenIndexes[Math.floor(Math.random() * hiddenIndexes.length)];
+            revealedIndexes.push(randomIndex);
+
+            // Mise à jour de l'affichage
+            let newDisplay = wordLetters.map((letter, index) =>
+                revealedIndexes.includes(index) ? letter : "_"
+            ).join(" ");
+
+            wordDisplay.textContent = newDisplay;
+        }
+
+        // Quand on clique sur "Nouveau", on choisit un nouveau mot
+        newWordButton.addEventListener("click", () => {
+            let newWord = getRandomWord();
+            displayWord(newWord);
+            guessContainer.style.display = "none"; // Cacher la zone de texte au début
+            responseMessage.style.display = "none"; // Cacher le message précédent
+        });
+
+        // Vérifier la réponse au clic sur "✅"
+        checkBtn.addEventListener("click", () => {
+            let userGuess = guessInput.value.trim().toLowerCase();
+
+            if (userGuess === currentWord) {
+                responseText.textContent = "Bonne réponse!";
+                responseMessage.style.display = "block";
+                setTimeout(() => newWordButton.click(), 2000); // Afficher un nouveau mot après 2s
+            } else {
+                responseText.textContent = "Mauvaise réponse!";
+                responseMessage.style.display = "block";
+                revealLetter(); // Révélée une lettre en cas de mauvaise réponse
+
+                // Vérifier si toutes les lettres sont révélées
+                if (revealedIndexes.length === wordLetters.length) {
+                    setTimeout(() => newWordButton.click(), 2000);
+                }
+            }
+        });
+
+        // Quand on clique sur le buzzer
+        buzzerButton.addEventListener("click", () => {
+            // Jouer le son du buzzer
+            const buzzerSound = new Audio("buzzerson.mp3");
+            buzzerSound.play();
+
+            // Afficher la zone de texte pour deviner
+            guessContainer.style.display = "block";
+        });
+    </script>
+
 </body>
 </html>

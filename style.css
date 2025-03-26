@@ -40,11 +40,13 @@ body {
     display: inline-block;
     width: 100px;
     height: 100px;
+    position: relative; /* Pour positionner l'image à l'intérieur du bouton */
 }
 
 .buzzer-icon {
-    width: 200px; /* Image du buzzer 2x plus grande */
-    height: 200px; 
+    width: 100%;  /* L'image remplira entièrement le bouton */
+    height: 100%;
+    object-fit: cover; /* Assure que l'image est centrée et couvre entièrement le bouton */
 }
 
 /* Style de la partie principale du contenu (mot et image) */
@@ -86,6 +88,7 @@ button:hover {
 #image-container img {
     width: 100%; /* L'image aura une taille maximale en fonction de la largeur de l'écran */
     max-width: 600px; /* Limite la taille de l'image à 600px */
+    max-height: 600px; /* Limite la hauteur de l'image à 600px */
     height: auto;
     border-radius: 5px;
     margin-top: 10px;

@@ -69,6 +69,7 @@
             maskedWord = wordArray.map(letter => '_').join(' ');
             wordDisplay.innerHTML = `${maskedWord} (${currentWord.length} lettres)`;
             feedback.innerHTML = ''; // Clear previous feedback
+            resetImageEffect(); // Reset image effect (reset blur)
             fetchImage(randomWord);
         }
 
@@ -98,6 +99,16 @@
                 console.error('Erreur lors de la récupération de l\'image:', error);
                 imageContainer.innerHTML = 'Erreur lors de la récupération de l\'image.';
             });
+        }
+
+        // Reset the image effect (start fresh with blur)
+        function resetImageEffect() {
+            wordImage.style.filter = 'blur(10px)'; // Apply blur effect
+            wordImage.onload = () => {
+                setTimeout(() => {
+                    wordImage.style.filter = 'blur(0px)'; // Remove the blur effect over time
+                }, 100); // Delay it slightly so the blur effect is visible
+            };
         }
 
         // Start the guessing process when buzzer is pressed

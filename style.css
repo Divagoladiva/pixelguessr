@@ -107,3 +107,39 @@ button:hover {
 #result-container, #guess-container {
     transition: all 0.3s ease-in-out;
 }
+
+/* Zone de texte */
+.zone-text {
+    display: inline-block;
+    width: 200px;
+    padding: 5px;
+    margin: 10px;
+}
+
+/* Style pour le bouton 'Nouveau' */
+#newWordButton {
+    font-size: 1.5em;
+    padding: 10px 20px;
+    background-color: blue;
+    color: white;
+    border: none;
+    cursor: pointer;
+    margin: 20px;
+}
+
+#newWordButton:hover {
+    background-color: darkblue;
+}
+
+/* Style de la zone de texte pour la réponse */
+#guess-input {
+    padding: 10px;
+    margin-right: 10px;
+    width: 200px;
+}
+
+/* Style du bouton de validation */
+#submit-guess {
+    padding: 10px 20px;
+    cursor: pointer;
+}

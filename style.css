@@ -1,134 +1,35 @@
-/* Style global */
 body {
-    text-align: center;
     font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
-    padding-top: 50px;
-    position: relative; /* Pour utiliser un positionnement relatif sur les éléments internes */
-    min-height: 100vh; /* Assure que la page prend toute la hauteur */
+    background-color: #f4f4f9;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
 }
 
-/* Style pour le titre */
-h1 {
-    font-size: 2em;
-}
-
-/* Style des boutons */
-button {
-    font-size: 1.5em;
-    padding: 10px 20px;
-    background-color: green;
-    color: white;
-    border: none;
-    cursor: pointer;
-    margin: 20px;
-}
-
-button:hover {
-    background-color: darkgreen;
-}
-
-/* Masquer les éléments par défaut */
-.hidden {
-    display: none;
-}
-
-/* Résultat correct ou incorrect */
-#result-container.correct {
-    color: green;
-    font-weight: bold;
-}
-
-#result-container.incorrect {
-    color: red;
-    font-weight: bold;
-}
-
-/* Apparence du guess-container */
-#guess-container {
-    margin-top: 20px;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    display: none; /* Cache par défaut */
-    z-index: 10; /* Pour s'assurer qu'il est devant d'autres éléments */
-}
-
-/* Champ de saisie */
-#guess-input {
-    padding: 10px;
-    margin-right: 10px;
-    width: 200px;
-}
-
-/* Bouton pour envoyer la réponse */
-#submit-guess {
-    padding: 10px 20px;
-    cursor: pointer;
-}
-
-/* Positionnement du randomWord et image */
-#randomWord {
+.container {
     text-align: center;
-    margin-top: 20px;
 }
 
-#randomImage {
-    display: block;
-    margin: 20px auto;
-    width: 400px;
-    height: auto;
+h1 {
+    font-size: 3rem;
+    color: #333;
+    margin-bottom: 20px;
 }
 
-/* Style du bouton buzzer */
-#buzzerButton {
-    position: fixed; /* Fixe le bouton en bas de la page */
-    bottom: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: transparent;
-    border: none;
-    cursor: pointer;
-    z-index: 100; /* Assure que le bouton est devant les autres éléments */
-}
-
-#buzzerButton img {
-    width: 150px; /* Ajuste la taille */
-    height: auto;
-}
-
-/* Style du result-container */
-#result-container {
-    position: absolute;
-    top: 60%; /* Décalé un peu plus bas */
-    left: 50%;
-    transform: translateX(-50%);
-    display: none; /* Cache par défaut */
-    font-size: 1.5em;
-    font-weight: bold;
-    z-index: 5; /* Pour s'assurer que ça soit derrière le guess-container */
-}
-
-/* Zone de texte */
-.zone-text {
-    display: inline-block;
-    width: 200px;
-    padding: 5px;
-    margin: 10px;
-}
-
-/* Style pour le bouton 'Nouveau' */
-#newWordButton {
-    font-size: 1.5em;
-    padding: 10px 20px;
-    background-color: blue;
+.play-button {
+    padding: 15px 30px;
+    font-size: 1.5rem;
+    background-color: #5c6bc0;
     color: white;
     border: none;
+    border-radius: 8px;
     cursor: pointer;
-    margin: 20px;
+    transition: background-color 0.3s;
 }
 
-#newWordButton:hover {
-    background-color: darkblue;
+.play-button:hover {
+    background-color: #3f4d92;
 }

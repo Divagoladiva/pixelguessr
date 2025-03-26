@@ -4,12 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pixel Guessr</title>
+    <link rel="stylesheet" href="style.css">
     <style>
         .image {
             width: 100%;
             height: auto;
-            filter: blur(10px); /* Début très flou */
-            transition: filter 15s ease-out; /* Transition du flou vers la netteté */
+            filter: blur(10px); /* Commence avec un flou fort */
+            transition: filter 15s ease-out; /* Transition du flou */
         }
     </style>
 </head>
@@ -29,7 +30,7 @@
             <div id="guess-container" style="display: none;">
                 <input type="text" id="guess-input" placeholder="Entrez votre réponse">
                 <button id="check-btn">✅</button>
-                <div id="feedback"></div> <!-- Zone de feedback -->
+                <div id="feedback" style="margin-top: 10px;"></div> <!-- Zone de feedback -->
             </div>
         </div>
     </div>
@@ -41,6 +42,8 @@
         const newWordBtn = document.getElementById('new-word-btn');
         const wordDisplay = document.getElementById('word-display');
         const imageContainer = document.getElementById('image-container');
+        const buzzerBtn = document.getElementById('buzzer-btn');
+        const buzzerSound = document.getElementById('buzzer-sound');
         const feedback = document.getElementById('feedback');
         const guessInput = document.getElementById('guess-input');
         const checkBtn = document.getElementById('check-btn');
@@ -54,6 +57,7 @@
 
         // Listen for button clicks
         newWordBtn.addEventListener('click', getNewWord);
+        buzzerBtn.addEventListener('click', startGuessing);
         checkBtn.addEventListener('click', checkAnswer);
 
         // Function to get a new word and image
@@ -63,9 +67,9 @@
             wordArray = randomWord.split('');
             guessedLetters = [];
             maskedWord = wordArray.map(letter => '_').join(' ');
-
             wordDisplay.innerHTML = `${maskedWord} (${currentWord.length} lettres)`;
             feedback.innerHTML = ''; // Clear previous feedback
+            resetImageEffect(); // Reset image effect (reset blur)
             fetchImage(randomWord);
         }
 
@@ -82,9 +86,9 @@
                 const imageUrl = data.photos[0]?.src?.large;
 
                 if (imageUrl) {
-                    wordImage.src = imageUrl;  // Changer la source de l'image
+                    wordImage.src = imageUrl;  // Change the image source
                     wordImage.onload = () => {
-                        resetImageEffect();  // Réinitialiser l'effet de flou quand l'image est chargée
+                        resetImageEffect();  // Ensure effect resets when the new image is loaded
                     };
                 } else {
                     imageContainer.innerHTML = 'Aucune image trouvée pour ce mot.';
@@ -96,39 +100,66 @@
             });
         }
 
-        // Réinitialiser l'effet de flou à chaque nouvelle image
+        // Reset the image effect (start fresh with blur)
         function resetImageEffect() {
-            wordImage.style.filter = 'blur(10px)'; // Appliquer un flou fort au début
-            // Attendre un tout petit instant pour laisser le flou visible avant de démarrer la transition
+            wordImage.style.filter = 'blur(10px)'; // Applique un flou fort au début
+            // Ajoute une petite pause pour laisser le flou visible avant de commencer la transition
             setTimeout(() => {
-                wordImage.style.transition = 'filter 15s ease-out'; // Appliquer la transition
-                wordImage.style.filter = 'blur(0px)'; // Réduire progressivement le flou
-            }, 100); // Petit délai pour bien visualiser le flou initial
+                wordImage.style.transition = 'filter 15s ease-out'; // Réactive la transition
+                wordImage.style.filter = 'blur(0px)'; // Réduit progressivement le flou
+            }, 100); // Delai court pour que le flou soit bien visible au départ
         }
 
-        // Vérifier la réponse de l'utilisateur
+        // Start the guessing process when buzzer is pressed
+        function startGuessing() {
+            buzzerSound.play();
+            guessContainer.style.display = 'block'; // Show input field
+        }
+
+        // Check the answer entered by the user
         function checkAnswer() {
             const userGuess = guessInput.value.trim().toLowerCase();
             if (userGuess === currentWord.toLowerCase()) {
+                // Correct answer: Show new word and image
                 feedback.innerHTML = '<span style="color: green;">Bonne réponse !</span>';
-                setTimeout(getNewWord, 2000); // Nouveau mot après 2 secondes
-                guessContainer.style.display = 'none'; // Masquer le champ de réponse
+                setTimeout(getNewWord, 2000); // Change word and image after 2 seconds
+                guessContainer.style.display = 'none'; // Hide input field
             } else {
-                feedback.innerHTML = '<span style="color: red;">Mauvaise réponse !</span>';
+                // Incorrect answer: Reveal a letter
+                revealLetter(userGuess);
             }
-            guessInput.value = ''; // Vider le champ de texte
+            guessInput.value = ''; // Clear input field
         }
 
-        // Function to start the guessing process when buzzer is pressed
-        function startGuessing() {
-            guessContainer.style.display = 'block'; // Show the input field
+        // Reveal a random letter from the word when the guess is wrong
+        function revealLetter(userGuess) {
+            const randomIndex = Math.floor(Math.random() * wordArray.length);
+            const letterToReveal = wordArray[randomIndex];
+
+            // Ensure the letter isn't already guessed
+            if (!guessedLetters.includes(letterToReveal)) {
+                guessedLetters.push(letterToReveal);
+                updateMaskedWord();
+            } else {
+                // Try again if the letter was already revealed
+                revealLetter(userGuess);
+            }
+
+            // Check if all letters have been revealed
+            if (guessedLetters.length === wordArray.length) {
+                feedback.innerHTML = '<span style="color: red;">Perdu !</span>';
+                setTimeout(getNewWord, 2000); // Change word and image after 2 seconds
+            }
         }
 
-        // Add buzzer functionality
-        buzzerBtn.addEventListener('click', () => {
-            buzzerSound.play();
-            startGuessing();
-        });
+        // Update the masked word with revealed letters
+        function updateMaskedWord() {
+            maskedWord = wordArray.map(letter => {
+                return guessedLetters.includes(letter) ? letter : '_';
+            }).join(' ');
+
+            wordDisplay.innerHTML = `${maskedWord} (${currentWord.length} lettres)`;
+        }
     </script>
 </body>
 </html>

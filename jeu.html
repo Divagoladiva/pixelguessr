@@ -91,26 +91,29 @@
             feedback.innerHTML = ''; // Clear previous feedback
         }
 
-        // Check the answer entered by the user
+        // Function to check the answer entered by the user
         function checkAnswer() {
             const userGuess = guessInput.value.trim().toLowerCase();
+        
             if (userGuess === currentWord.toLowerCase()) {
-                // Correct answer: Show new word and image
-                feedback.innerHTML = '<span style="color: green;">👍 Bonne réponse !</span>';
+                // Correct answer: Show feedback and new word/image
+                feedback.innerHTML = '<span style="color: green;">Bonne réponse ! 🎉</span>';
                 setTimeout(getNewWord, 2000); // Change word and image after 2 seconds
                 guessContainer.style.display = 'none'; // Hide input field
             } else {
-                // Incorrect answer: Reveal a letter
+                // Incorrect answer: Reveal a letter and show feedback
                 revealLetter(userGuess);
+                feedback.innerHTML = '<span style="color: red;">Mauvaise réponse 😞. Réessayez !</span>';
             }
+        
             guessInput.value = ''; // Clear input field
         }
-
+        
         // Reveal a random letter from the word when the guess is wrong
         function revealLetter(userGuess) {
             const randomIndex = Math.floor(Math.random() * wordArray.length);
             const letterToReveal = wordArray[randomIndex];
-
+        
             // Ensure the letter isn't already guessed
             if (!guessedLetters.includes(letterToReveal)) {
                 guessedLetters.push(letterToReveal);
@@ -119,10 +122,10 @@
                 // Try again if the letter was already revealed
                 revealLetter(userGuess);
             }
-
+        
             // Check if all letters have been revealed
             if (guessedLetters.length === wordArray.length) {
-                feedback.innerHTML = '<span style="color: red;">❌ Perdu !</span>';
+                feedback.innerHTML = '<span style="color: red;">Perdu 😔 !</span>';
                 setTimeout(getNewWord, 2000); // Change word and image after 2 seconds
             }
         }

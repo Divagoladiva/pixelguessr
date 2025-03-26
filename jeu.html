@@ -20,8 +20,8 @@
             <div id="guess-container" style="display: none;">
                 <input type="text" id="guess-input" placeholder="Entrez votre réponse">
                 <button id="check-btn">✅</button>
-                <div id="feedback" style="margin-top: 10px;"></div> <!-- Zone de feedback -->
             </div>
+            <div id="feedback" style="margin-top: 10px;"></div> <!-- Zone de feedback -->
         </div>
     </div>
 
@@ -88,6 +88,7 @@
         function startGuessing() {
             buzzerSound.play();
             guessContainer.style.display = 'block'; // Show input field
+            feedback.innerHTML = ''; // Clear previous feedback
         }
 
         // Check the answer entered by the user
@@ -95,7 +96,7 @@
             const userGuess = guessInput.value.trim().toLowerCase();
             if (userGuess === currentWord.toLowerCase()) {
                 // Correct answer: Show new word and image
-                feedback.innerHTML = '<span style="color: green;">Bonne réponse !</span>';
+                feedback.innerHTML = '<span style="color: green;">👍 Bonne réponse !</span>';
                 setTimeout(getNewWord, 2000); // Change word and image after 2 seconds
                 guessContainer.style.display = 'none'; // Hide input field
             } else {
@@ -121,7 +122,7 @@
 
             // Check if all letters have been revealed
             if (guessedLetters.length === wordArray.length) {
-                feedback.innerHTML = '<span style="color: red;">Perdu !</span>';
+                feedback.innerHTML = '<span style="color: red;">❌ Perdu !</span>';
                 setTimeout(getNewWord, 2000); // Change word and image after 2 seconds
             }
         }

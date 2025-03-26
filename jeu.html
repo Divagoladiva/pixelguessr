@@ -17,12 +17,7 @@
             <button id="new-word-btn">Nouveau</button>
             <div id="word-display"></div>
             <div id="image-container"></div>
-
-            <!-- Zone de saisie pour deviner le mot -->
-            <div id="guess-container" style="display: none;">
-                <input type="text" id="guess-input" placeholder="Entrez votre réponse">
-                <button id="check-btn">✅</button>
-            </div>
+            <div id="feedback" style="margin-top: 10px;"></div> <!-- Zone de feedback -->
         </div>
     </div>
 
@@ -35,6 +30,7 @@
         const imageContainer = document.getElementById('image-container');
         const buzzerBtn = document.getElementById('buzzer-btn');
         const buzzerSound = document.getElementById('buzzer-sound');
+        const feedback = document.getElementById('feedback');
         const guessInput = document.getElementById('guess-input');
         const checkBtn = document.getElementById('check-btn');
         const guessContainer = document.getElementById('guess-container');
@@ -56,7 +52,8 @@
             wordArray = randomWord.split('');
             guessedLetters = [];
             maskedWord = wordArray.map(letter => '_').join(' ');
-            wordDisplay.innerHTML = maskedWord;
+            wordDisplay.innerHTML = `${maskedWord} (${currentWord.length} lettres)`;
+            feedback.innerHTML = ''; // Clear previous feedback
             fetchImage(randomWord);
         }
 
@@ -94,8 +91,8 @@
             const userGuess = guessInput.value.trim().toLowerCase();
             if (userGuess === currentWord.toLowerCase()) {
                 // Correct answer: Show new word and image
-                alert('Bonne réponse !');
-                getNewWord(); // Fetch a new word and image
+                feedback.innerHTML = '<span style="color: green;">Bonne réponse !</span>';
+                setTimeout(getNewWord, 2000); // Change word and image after 2 seconds
                 guessContainer.style.display = 'none'; // Hide input field
             } else {
                 // Incorrect answer: Reveal a letter
@@ -117,6 +114,12 @@
                 // Try again if the letter was already revealed
                 revealLetter(userGuess);
             }
+
+            // Check if all letters have been revealed
+            if (guessedLetters.length === wordArray.length) {
+                feedback.innerHTML = '<span style="color: red;">Perdu !</span>';
+                setTimeout(getNewWord, 2000); // Change word and image after 2 seconds
+            }
         }
 
         // Update the masked word with revealed letters
@@ -125,7 +128,7 @@
                 return guessedLetters.includes(letter) ? letter : '_';
             }).join(' ');
 
-            wordDisplay.innerHTML = maskedWord;
+            wordDisplay.innerHTML = `${maskedWord} (${currentWord.length} lettres)`;
         }
     </script>
 </body>

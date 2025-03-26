@@ -16,12 +16,14 @@
         <div class="main-content">
             <button id="new-word-btn">Nouveau</button>
             <div id="word-display"></div>
-            <div id="image-container"></div>
+            <div id="image-container">
+                <img id="word-image" src="" alt="Mot image">
+            </div>
             <div id="guess-container" style="display: none;">
                 <input type="text" id="guess-input" placeholder="Entrez votre réponse">
                 <button id="check-btn">✅</button>
+                <div id="feedback" style="margin-top: 10px;"></div> <!-- Zone de feedback -->
             </div>
-            <div id="feedback" style="margin-top: 10px;"></div> <!-- Zone de feedback -->
         </div>
     </div>
 
@@ -72,8 +74,16 @@
             .then(response => response.json())
             .then(data => {
                 const imageUrl = data.photos[0]?.src?.large;
+                const wordImage = document.getElementById('word-image');
+                
                 if (imageUrl) {
-                    imageContainer.innerHTML = `<img src="${imageUrl}" alt="${word}" class="image">`;
+                    wordImage.src = imageUrl;  // Change the image source
+
+                    // Reset pixelation effect and apply the gradual depixelization
+                    wordImage.style.filter = 'pixelate(10px)';  // Initial pixelation
+                    setTimeout(() => {
+                        wordImage.style.filter = 'pixelate(0px)';  // Gradually remove pixelation
+                    }, 100); // Apply after a slight delay to ensure it's rendered
                 } else {
                     imageContainer.innerHTML = 'Aucune image trouvée pour ce mot.';
                 }
@@ -88,32 +98,28 @@
         function startGuessing() {
             buzzerSound.play();
             guessContainer.style.display = 'block'; // Show input field
-            feedback.innerHTML = ''; // Clear previous feedback
         }
 
-        // Function to check the answer entered by the user
+        // Check the answer entered by the user
         function checkAnswer() {
             const userGuess = guessInput.value.trim().toLowerCase();
-        
             if (userGuess === currentWord.toLowerCase()) {
-                // Correct answer: Show feedback and new word/image
-                feedback.innerHTML = '<span style="color: green;">Bonne réponse ! 🎉</span>';
+                // Correct answer: Show new word and image
+                feedback.innerHTML = '<span style="color: green;">Bonne réponse !</span>';
                 setTimeout(getNewWord, 2000); // Change word and image after 2 seconds
                 guessContainer.style.display = 'none'; // Hide input field
             } else {
-                // Incorrect answer: Reveal a letter and show feedback
+                // Incorrect answer: Reveal a letter
                 revealLetter(userGuess);
-                feedback.innerHTML = '<span style="color: red;">Mauvaise réponse 😞. Réessayez !</span>';
             }
-        
             guessInput.value = ''; // Clear input field
         }
-        
+
         // Reveal a random letter from the word when the guess is wrong
         function revealLetter(userGuess) {
             const randomIndex = Math.floor(Math.random() * wordArray.length);
             const letterToReveal = wordArray[randomIndex];
-        
+
             // Ensure the letter isn't already guessed
             if (!guessedLetters.includes(letterToReveal)) {
                 guessedLetters.push(letterToReveal);
@@ -122,10 +128,10 @@
                 // Try again if the letter was already revealed
                 revealLetter(userGuess);
             }
-        
+
             // Check if all letters have been revealed
             if (guessedLetters.length === wordArray.length) {
-                feedback.innerHTML = '<span style="color: red;">Perdu 😔 !</span>';
+                feedback.innerHTML = '<span style="color: red;">Perdu !</span>';
                 setTimeout(getNewWord, 2000); // Change word and image after 2 seconds
             }
         }

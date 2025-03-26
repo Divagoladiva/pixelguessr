@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jeu Pixel Guessr</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="game-container">
+        <button class="new-word" onclick="getNewWord()">Nouveau</button>
+        <h2 id="word-display">Cliquez sur "Nouveau" pour commencer</h2>
+    </div>
+
+    <script src="liste.js"></script>
+    <script>
+        function getNewWord() {
+            const randomIndex = Math.floor(Math.random() * words.length);
+            const word = words[randomIndex];
+            document.getElementById('word-display').innerText = word;
+        }
+    </script>
+</body>
+</html>

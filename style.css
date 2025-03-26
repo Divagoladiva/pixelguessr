@@ -38,11 +38,13 @@ body {
     cursor: pointer;
     padding: 0;
     display: inline-block;
+    width: 100px;
+    height: 100px;
 }
 
 .buzzer-icon {
-    width: 100px;
-    height: 100px;
+    width: 200px; /* Image du buzzer 2x plus grande */
+    height: 200px; 
 }
 
 /* Style de la partie principale du contenu (mot et image) */
@@ -82,8 +84,8 @@ button:hover {
 }
 
 #image-container img {
-    width: 100%; /* Image plus grande */
-    max-width: 800px;
+    width: 100%; /* L'image aura une taille maximale en fonction de la largeur de l'écran */
+    max-width: 600px; /* Limite la taille de l'image à 600px */
     height: auto;
     border-radius: 5px;
     margin-top: 10px;

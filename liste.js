@@ -48,4 +48,3 @@ const words = [
     "pool", "trailer", "calendar", "cutting board", "glass", "cookie jar", "cloth", "aluminum foil",
     "cat basket", "bread basket", "crate", "fruit basket", "grocery basket", "animal basket", "dirty laundry basket"
 ];
-</script>

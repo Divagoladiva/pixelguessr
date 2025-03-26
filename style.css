@@ -4,6 +4,8 @@ body {
     font-family: Arial, sans-serif;
     background-color: #f4f4f4;
     padding-top: 50px;
+    position: relative; /* Pour utiliser un positionnement relatif sur les éléments internes */
+    min-height: 100vh; /* Assure que la page prend toute la hauteur */
 }
 
 /* Style pour le titre */
@@ -47,18 +49,20 @@ button:hover {
     margin-top: 20px;
     position: absolute;
     top: 50%;
-    left: 65%;
+    left: 50%;
     transform: translate(-50%, -50%);
     display: none; /* Cache par défaut */
     z-index: 10; /* Pour s'assurer qu'il est devant d'autres éléments */
 }
 
+/* Champ de saisie */
 #guess-input {
     padding: 10px;
     margin-right: 10px;
     width: 200px;
 }
 
+/* Bouton pour envoyer la réponse */
 #submit-guess {
     padding: 10px 20px;
     cursor: pointer;
@@ -79,13 +83,14 @@ button:hover {
 
 /* Style du bouton buzzer */
 #buzzerButton {
-    position: absolute;
-    bottom: 10px;
+    position: fixed; /* Fixe le bouton en bas de la page */
+    bottom: 20px;
     left: 50%;
     transform: translateX(-50%);
     background: transparent;
     border: none;
     cursor: pointer;
+    z-index: 100; /* Assure que le bouton est devant les autres éléments */
 }
 
 #buzzerButton img {
@@ -96,9 +101,9 @@ button:hover {
 /* Style du result-container */
 #result-container {
     position: absolute;
-    top: 60%;  /* Décalé un peu plus bas */
-    left: 65%;
-    transform: translate(-50%, -50%);
+    top: 60%; /* Décalé un peu plus bas */
+    left: 50%;
+    transform: translateX(-50%);
     display: none; /* Cache par défaut */
     font-size: 1.5em;
     font-weight: bold;

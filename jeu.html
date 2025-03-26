@@ -39,10 +39,8 @@
         </div>
     </div>
 
+    <script src="liste.js"></script> <!-- Importer le fichier liste.js -->
     <script>
-        // Liste de mots
-        const words = ["pan", "sofa", "lamp", "table", "desk"];  // Liste réduite pour l'exemple
-
         let currentWord = "";
         let displayedWord = "";
         let wordImageUrl = "";
@@ -60,7 +58,7 @@
         const responseMessage = document.getElementById("response-message");
         const responseText = document.getElementById("response-text");
 
-        // Fonction pour choisir un mot aléatoire
+        // Fonction pour choisir un mot aléatoire de la liste
         function getRandomWord() {
             const randomIndex = Math.floor(Math.random() * words.length);
             return words[randomIndex];
@@ -105,7 +103,7 @@
             }
         }
 
-        // Vérifie si le mot est entièrement révélé
+        // Fonction pour vérifier si le mot est entièrement révélé
         function isWordRevealed() {
             return displayedWord.split(" ").every(letter => letter !== "_");
         }

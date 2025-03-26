@@ -9,8 +9,8 @@
         .image {
             width: 100%;
             height: auto;
-            filter: blur(10px); /* Commence très flou */
-            transition: filter 15s ease-out; /* Transition sur 15 secondes */
+            filter: blur(10px); /* Commence avec un flou fort */
+            transition: filter 15s ease-out; /* Transition du flou */
         }
     </style>
 </head>
@@ -102,10 +102,12 @@
 
         // Reset the image effect (start fresh with blur)
         function resetImageEffect() {
-            wordImage.style.filter = 'blur(10px)'; // Apply blur effect
+            wordImage.style.filter = 'blur(10px)'; // Applique un flou fort au début
+            // Ajoute une petite pause pour laisser le flou visible avant de commencer la transition
             setTimeout(() => {
-                wordImage.style.filter = 'blur(0px)'; // Remove the blur effect over time
-            }, 100); // Delay it slightly so the blur effect is visible
+                wordImage.style.transition = 'filter 15s ease-out'; // Réactive la transition
+                wordImage.style.filter = 'blur(0px)'; // Réduit progressivement le flou
+            }, 100); // Delai court pour que le flou soit bien visible au départ
         }
 
         // Start the guessing process when buzzer is pressed

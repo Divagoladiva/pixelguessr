@@ -3,29 +3,53 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jeu Pixel Guessr</title>
+    <title>Pixel Guessr</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="game-container">
-        <button class="new-word" onclick="getNewWord()">Nouveau</button>
-        <h2 id="word-display">Cliquez sur "Nouveau" pour commencer</h2>
+    <div class="container">
+        <h1>Pixel Guessr</h1>
+        <button id="new-word-btn">Nouveau</button>
+        <div id="word-display"></div>
+        <div id="image-container"></div>
     </div>
 
-    <!-- Inclusion du fichier liste.js ici -->
     <script src="liste.js"></script>
-    
-    <!-- Script pour récupérer un mot aléatoire -->
     <script>
+        const newWordBtn = document.getElementById('new-word-btn');
+        const wordDisplay = document.getElementById('word-display');
+        const imageContainer = document.getElementById('image-container');
+
+        newWordBtn.addEventListener('click', getNewWord);
+
         function getNewWord() {
-            // Vérifie si 'words' est défini avant de l'utiliser
-            if (typeof words !== 'undefined' && words.length > 0) {
-                const randomIndex = Math.floor(Math.random() * words.length);
-                const word = words[randomIndex];
-                document.getElementById('word-display').innerText = word;
-            } else {
-                console.error("La variable 'words' n'est pas définie ou vide.");
-            }
+            const randomWord = words[Math.floor(Math.random() * words.length)];
+            wordDisplay.innerHTML = `Mot: ${randomWord}`;
+            fetchImage(randomWord);
+        }
+
+        function fetchImage(word) {
+            const apiKey = 'hqpPkwEsVPGOmZt7TFlJMSRBv0PtDdjZtDwN2OMgxem3mPQ3ZkJgo4oN';
+            const apiUrl = `https://api.pexels.com/v1/search?query=${word}&per_page=1`;
+
+            fetch(apiUrl, {
+                headers: {
+                    'Authorization': apiKey
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                const imageUrl = data.photos[0]?.src?.large;
+                if (imageUrl) {
+                    imageContainer.innerHTML = `<img src="${imageUrl}" alt="${word}" style="max-width: 100%; height: auto;">`;
+                } else {
+                    imageContainer.innerHTML = 'Aucune image trouvée pour ce mot.';
+                }
+            })
+            .catch(error => {
+                console.error('Erreur lors de la récupération de l\'image:', error);
+                imageContainer.innerHTML = 'Erreur lors de la récupération de l\'image.';
+            });
         }
     </script>
 </body>

@@ -13,16 +13,28 @@
 
     <script>
         const words = ["chien", "chat", "pomme", "soleil", "voiture", "montagne", "océan", "ordinateur", "livre", "musique"];
+        
+        const apiKey = 'hqpPkwEsVPGOmZt7TFlJMSRBv0PtDdjZtDwN2OMgxem3mPQ3ZkJgo4oN';
 
         document.getElementById("newWordButton").addEventListener("click", function() {
             let randomWord = words[Math.floor(Math.random() * words.length)];
             document.getElementById("randomWord").textContent = randomWord;
 
-            // Utilisation d'Unsplash Source pour récupérer une image liée au mot
-            const imageUrl = `https://source.unsplash.com/400x300/?${randomWord}`;
-
-            // Affichage de l'image
-            document.getElementById("randomImage").src = imageUrl;
+            // Requête vers l'API Pexels pour rechercher une image
+            fetch(`https://api.pexels.com/v1/search?query=${randomWord}&per_page=1`, {
+                headers: {
+                    Authorization: apiKey // Envoie la clé API pour authentification
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.photos && data.photos.length > 0) {
+                    document.getElementById("randomImage").src = data.photos[0].src.medium;
+                } else {
+                    document.getElementById("randomImage").src = "https://via.placeholder.com/400x300?text=Aucune+image";
+                }
+            })
+            .catch(error => console.error("Erreur lors de la récupération de l'image:", error));
         });
     </script>
 </body>

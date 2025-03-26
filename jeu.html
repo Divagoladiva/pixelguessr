@@ -47,6 +47,7 @@
         let displayedWord = "";
         let wordImageUrl = "";
         let wordLetters = [];
+        let revealedLetters = 0;
 
         // Référence aux éléments DOM
         const buzzerButton = document.getElementById("buzzer-btn");
@@ -70,6 +71,7 @@
             displayedWord = word.split("").map(() => "_").join(" ");
             wordDisplay.textContent = displayedWord;
             wordLetters = word.split("");
+            revealedLetters = 0;
         }
 
         // Fonction pour afficher une nouvelle image basée sur le mot
@@ -91,10 +93,21 @@
 
         // Fonction pour afficher une lettre du mot
         function revealLetter() {
+            const remainingLetters = displayedWord.split(" ").filter(letter => letter === "_");
+            if (remainingLetters.length === 0) return;
+
             const randomIndex = Math.floor(Math.random() * wordLetters.length);
-            displayedWord = displayedWord.split(" ");
-            displayedWord[randomIndex] = wordLetters[randomIndex];
-            wordDisplay.textContent = displayedWord.join(" ");
+            if (displayedWord.split(" ")[randomIndex] === "_") {
+                displayedWord = displayedWord.split(" ");
+                displayedWord[randomIndex] = wordLetters[randomIndex];
+                revealedLetters++;
+                wordDisplay.textContent = displayedWord.join(" ");
+            }
+        }
+
+        // Vérifie si le mot est entièrement révélé
+        function isWordRevealed() {
+            return displayedWord.split(" ").every(letter => letter !== "_");
         }
 
         // Quand on appuie sur le buzzer, on affiche la zone de texte
@@ -119,10 +132,20 @@
                 responseText.textContent = "Bonne réponse!";
                 responseMessage.style.display = "block";
                 guessContainer.style.display = "none";
+                if (isWordRevealed()) {
+                    setTimeout(() => {
+                        newWordButton.click(); // Simule un clic sur "Nouveau" après 2 secondes
+                    }, 2000);
+                }
             } else {
                 responseText.textContent = "Mauvaise réponse!";
                 responseMessage.style.display = "block";
                 revealLetter();
+                if (isWordRevealed()) {
+                    setTimeout(() => {
+                        newWordButton.click(); // Simule un clic sur "Nouveau" après 2 secondes
+                    }, 2000);
+                }
             }
         });
     </script>

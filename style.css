@@ -93,3 +93,17 @@ button:hover {
     border-radius: 5px;
     margin-top: 10px;
 }
+.input {
+    padding: 10px;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: 50%;
+    margin: 10px 0;
+}
+#guess-container {
+    margin-top: 20px;
+}
+#response-message {
+    margin-top: 20px;
+}

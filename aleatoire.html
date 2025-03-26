@@ -10,6 +10,17 @@
     <button id="newWordButton">Nouveau</button>
     <h2 id="randomWord"></h2>
     <img id="randomImage" src="" alt="Image aléatoire">
+    
+    <!-- Zone pour deviner l'objet -->
+    <button id="buzzerButton">
+        <img src="buzzer.png" alt="Buzzer" width="50" height="50">
+    </button>
+    <div id="guess-container" class="hidden">
+        <input type="text" id="guess-input" class="zone-text" placeholder="Entrez votre réponse">
+        <button id="submit-guess">Valider</button>
+    </div>
+
+    <div id="result-container"></div>
 
     <script>
         const words = [
@@ -62,29 +73,66 @@
             "pool", "trailer", "calendar", "cutting board", "glass", "cookie jar", "cloth", "aluminum foil",
             "cat basket", "bread basket", "crate", "fruit basket", "grocery basket", "animal basket", "dirty laundry basket"
         ];
-        
         const apiKey = 'hqpPkwEsVPGOmZt7TFlJMSRBv0PtDdjZtDwN2OMgxem3mPQ3ZkJgo4oN';
 
-        document.getElementById("newWordButton").addEventListener("click", function() {
-            let randomWord = words[Math.floor(Math.random() * words.length)];
-            document.getElementById("randomWord").textContent = randomWord;
+        let currentWord = '';
+        let currentImageUrl = '';
 
-            // Requête vers l'API Pexels pour rechercher une image
-            fetch(`https://api.pexels.com/v1/search?query=${randomWord}&per_page=1`, {
+        document.getElementById("newWordButton").addEventListener("click", function() {
+            generateNewWord();
+        });
+
+        document.getElementById("buzzerButton").addEventListener("click", function() {
+            document.getElementById("guess-container").classList.remove('hidden');
+            document.getElementById("result-container").textContent = ''; // Clear previous result
+            document.getElementById("guess-input").value = ''; // Clear previous input
+        });
+
+        document.getElementById("submit-guess").addEventListener("click", function() {
+            const userGuess = document.getElementById("guess-input").value.trim().toLowerCase();
+            
+            if (userGuess === currentWord) {
+                document.getElementById("result-container").textContent = "Bravo, c'est correct!";
+                document.getElementById("result-container").classList.add('correct');
+                document.getElementById("result-container").classList.remove('incorrect');
+            } else {
+                document.getElementById("result-container").textContent = "Désolé, ce n'est pas correct.";
+                document.getElementById("result-container").classList.add('incorrect');
+                document.getElementById("result-container").classList.remove('correct');
+            }
+            
+            // Reset and load new word and image after 2 seconds
+            setTimeout(function() {
+                generateNewWord();
+                document.getElementById("guess-container").classList.add('hidden');
+            }, 2000);
+        });
+
+        function generateNewWord() {
+            // Choisir un mot aléatoire
+            currentWord = words[Math.floor(Math.random() * words.length)];
+            document.getElementById("randomWord").textContent = currentWord;
+
+            // Requête vers l'API Pexels pour obtenir une image aléatoire
+            fetch(`https://api.pexels.com/v1/search?query=${currentWord}&per_page=1`, {
                 headers: {
-                    Authorization: apiKey // Envoie la clé API pour authentification
+                    Authorization: apiKey // Clé API pour authentification
                 }
             })
             .then(response => response.json())
             .then(data => {
                 if (data.photos && data.photos.length > 0) {
-                    document.getElementById("randomImage").src = data.photos[0].src.medium;
+                    currentImageUrl = data.photos[0].src.medium;
+                    document.getElementById("randomImage").src = currentImageUrl;
                 } else {
                     document.getElementById("randomImage").src = "https://via.placeholder.com/400x300?text=Aucune+image";
                 }
             })
             .catch(error => console.error("Erreur lors de la récupération de l'image:", error));
-        });
+        }
+
+        // Initial call to display a word and image when the page loads
+        generateNewWord();
     </script>
 </body>
 </html>

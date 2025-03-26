@@ -11,10 +11,12 @@
     <h2 id="randomWord"></h2>
     <img id="randomImage" src="" alt="Image aléatoire">
     
-    <!-- Le bouton buzzer en dessous de l'image -->
-    <button id="buzzerButton">
-        <img src="buzzer.png" alt="Buzzer" width="50" height="50">
-    </button>
+    <!-- Container pour le bouton "Buzzer" pour qu'il soit en dessous de l'image -->
+    <div class="buzzer-container">
+        <button id="buzzerButton">
+            <img src="buzzer.png" alt="Buzzer" width="150" height="150"> <!-- L'icône est 3x plus grande -->
+        </button>
+    </div>
     
     <!-- Zone pour deviner l'objet -->
     <div id="guess-container" class="hidden">

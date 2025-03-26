@@ -1,76 +1,49 @@
-/* Style de la page */
-body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    margin: 0;
-    text-align: center;
-    padding: 0 10px; /* Ajouter un peu de marge sur les côtés de la page */
-}
-
-.container {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: white;
-    border-radius: 10px;
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
-    padding: 20px;
-    width: 100%;
-    max-width: 1200px; /* Augmenter la largeur maximale du container */
-    margin: 0 10px; /* Marges pour laisser de l'espace de chaque côté */
-    box-sizing: border-box; /* Assure que les paddings et marges sont inclus dans la largeur totale */
-}
-
-/* Container pour le bouton "Buzzer" */
-.left-container {
-    flex: 1;
-    text-align: center;
-    padding-right: 20px; /* Ajout d'un peu de padding à droite pour espacer le contenu */
-}
-
+/* Style du bouton buzzer, deux fois plus grand */
 .buzzer-btn {
     background-color: transparent;
     border: none;
     cursor: pointer;
     padding: 0;
     display: inline-block;
-    width: 100px;
-    height: 100px;
+    width: 200px;  /* Taille doublée */
+    height: 200px; /* Taille doublée */
     position: relative; /* Pour positionner l'image à l'intérieur du bouton */
 }
 
+/* Image du buzzer deux fois plus grande */
 .buzzer-icon {
     width: 100%;  /* L'image remplira entièrement le bouton */
     height: 100%;
     object-fit: cover; /* Assure que l'image est centrée et couvre entièrement le bouton */
 }
 
-/* Style de la partie principale du contenu (mot et image) */
-.main-content {
-    flex: 2;
+/* Style de la zone de texte et du bouton de vérification */
+#guess-container {
+    margin-top: 20px;
+}
+
+#guess-input {
+    padding: 10px;
+    font-size: 1.2rem;
+    width: 60%;
     text-align: center;
-    padding-left: 20px; /* Ajout d'un peu de padding à gauche pour espacer le contenu */
+    border-radius: 5px;
+    border: 2px solid #ccc;
+    margin-right: 10px;
 }
 
-button {
-    background-color: #007bff;
+#check-btn {
+    background-color: #28a745;
     color: white;
-    font-size: 1.5rem;
-    padding: 20px;
-    width: 100%;
+    font-size: 1.2rem;
+    padding: 10px 20px;
     border: none;
-    border-radius: 8px;
+    border-radius: 5px;
     cursor: pointer;
-    transition: background-color 0.3s ease;
-    margin-bottom: 20px;
 }
 
-button:hover {
-    background-color: #0056b3;
+#check-btn:hover {
+    background-color: #218838;
 }
 
 #word-display {
@@ -80,16 +53,7 @@ button:hover {
     color: #333;
 }
 
-#image-container {
-    margin-top: 20px;
-    text-align: center;
-}
-
-#image-container img {
-    width: 100%; /* L'image aura une taille maximale en fonction de la largeur de l'écran */
-    max-width: 600px; /* Limite la taille de l'image à 600px */
-    max-height: 600px; /* Limite la hauteur de l'image à 600px */
-    height: auto;
-    border-radius: 5px;
-    margin-top: 10px;
+#word-display span {
+    font-weight: normal;
+    color: #555;
 }
